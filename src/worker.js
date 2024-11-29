@@ -1,4 +1,4 @@
-// https://github.com/bia-pain-bache/BPB-Worker-Panel
+// https://github
 import { vlessOverWSHandler } from './protocols/vless';
 import { trojanOverWSHandler } from './protocols/trojan';
 import { updateWarpConfigs } from './kv/handlers';
