@@ -1,8 +1,8 @@
 {
-  "name": "bpb-worker-panel",
+  "name": "nsa",
   "version": "2.7.2",
   "author": {
-    "name": "Bia Pain Bache"
+    "name": "nesa"
   },
   "devDependencies": {
     "wrangler": "latest",
