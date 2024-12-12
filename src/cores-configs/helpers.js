@@ -28,10 +28,10 @@ export function generateRemark(index, port, address, cleanIPs, protocol, configT
     const type = configType ? ` ${configType}` : '';
 
     cleanIPs.includes(address)
-        ? addressType = 'Clean IP'
+        ? addressType = 'CleanIP'
         : addressType = isDomain(address) ? 'Domain': isIPv4(address) ? 'IPv4' : isIPv6(address) ? 'IPv6' : '';
 
-    return `💦 ${index} - ${protocol}${type} - ${addressType} : ${port}`;
+    return `💎 ${index} - ${protocol}${type} - ${addressType} : ${port}`;
 }
 
 export function randomUpperCase (str) {
