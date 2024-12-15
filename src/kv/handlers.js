@@ -36,7 +36,6 @@ export async function updateDataset (request, env) {
             throw new Error(`An error occurred while getting current KV settings - ${error}`);
         }
     } else {
-        await env.bpb.delete('warpConfigs');
         newSettings = null;
     }
 
@@ -84,10 +83,10 @@ export async function updateDataset (request, env) {
         vlessConfigs: validateField('vlessConfigs') ?? currentSettings?.vlessConfigs ?? true,
         trojanConfigs: validateField('trojanConfigs') ?? currentSettings?.trojanConfigs ?? false,
         ports: validateField('ports')?.split(',') ?? currentSettings?.ports ?? ['443'],
-        lengthMin: validateField('fragmentLengthMin') ?? currentSettings?.lengthMin ?? '100',
-        lengthMax: validateField('fragmentLengthMax') ?? currentSettings?.lengthMax ?? '200',
+        lengthMin: validateField('fragmentLengthMin') ?? currentSettings?.lengthMin ?? '10',
+        lengthMax: validateField('fragmentLengthMax') ?? currentSettings?.lengthMax ?? '30',
         intervalMin: validateField('fragmentIntervalMin') ?? currentSettings?.intervalMin ?? '1',
-        intervalMax: validateField('fragmentIntervalMax') ?? currentSettings?.intervalMax ?? '1',
+        intervalMax: validateField('fragmentIntervalMax') ?? currentSettings?.intervalMax ?? '2',
         fragmentPackets: validateField('fragmentPackets') ?? currentSettings?.fragmentPackets ?? 'tlshello',
         bypassLAN: validateField('bypass-lan') ?? currentSettings?.bypassLAN ?? false,
         bypassIran: validateField('bypass-iran') ?? currentSettings?.bypassIran ?? false,
@@ -98,7 +97,7 @@ export async function updateDataset (request, env) {
         blockUDP443: validateField('block-udp-443') ?? currentSettings?.blockUDP443 ?? false,
         customBypassRules: validateField('customBypassRules')?.replaceAll(' ', '') ?? currentSettings?.customBypassRules ?? '',
         customBlockRules: validateField('customBlockRules')?.replaceAll(' ', '') ?? currentSettings?.customBlockRules ?? '',
-        warpEndpoints: validateField('warpEndpoints')?.replaceAll(' ', '') ?? currentSettings?.warpEndpoints ?? 'engage.cloudflareclient.com:2408',
+        warpEndpoints: validateField('warpEndpoints')?.replaceAll(' ', '') ?? currentSettings?.warpEndpoints ?? '188.114.98.183:955,188.114.98.99:4233,188.114.97.149:1070,188.114.99.223:2506,188.114.98.44:988,162.159.192.175:891,188.114.98.1:1010,162.159.192.0:955,188.114.97.170:2371,162.159.192.187:7559',
         warpFakeDNS: validateField('warpFakeDNS') ?? currentSettings?.warpFakeDNS ?? false,
         warpEnableIPv6: validateField('warpEnableIPv6') ?? currentSettings?.warpEnableIPv6 ?? true,
         warpPlusLicense: validateField('warpPlusLicense') ?? currentSettings?.warpPlusLicense ?? '',
@@ -115,7 +114,8 @@ export async function updateDataset (request, env) {
     };
 
     try {    
-        await env.bpb.put("proxySettings", JSON.stringify(proxySettings));          
+        await env.bpb.put("proxySettings", JSON.stringify(proxySettings));
+        if (isReset) await updateWarpConfigs(request, env);          
     } catch (error) {
         console.log(error);
         throw new Error(`An error occurred while updating KV - ${error}`);
